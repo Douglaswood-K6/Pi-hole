@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Doug | Networking &amp; Security Projects</title>
+  <meta name="description" content="Student portfolio: home network projects built on a Raspberry Pi, including a self-hosted DNS ad blocker and this website.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;800&family=Martian+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+
+  <header class="top">
+    <a class="brand" href="#">
+      <span class="leds" aria-hidden="true"><i class="led led-pwr"></i><i class="led led-act"></i></span>
+      doug
+    </a>
+    <nav aria-label="Main">
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-text">
+        <!-- EDIT: add your last name after Doug -->
+        <h1>Doug</h1>
+        <p class="lede">I'm a student who learns networking by building it. Right now that means a Raspberry Pi in my apartment filtering every DNS lookup my devices make.</p>
+        <p class="hero-meta">Studying networking, data and software <!-- EDIT: replace with your major and school --> at <span class="placeholder">[Your University]</span>. Looking for IT and cybersecurity internships.</p>
+        <a class="button" href="#projects">See what I've built</a>
+      </div>
+
+      <figure class="console" aria-label="Sample of live DNS queries from my Pi-hole">
+        <figcaption>
+          <span class="dot"></span> pi-hole query log
+          <span class="console-host">raspberrypi</span>
+        </figcaption>
+        <ol class="log">
+          <li><time>17:42:07</time><span class="domain">github.com</span><span class="ok">answered</span></li>
+          <li><time>17:42:07</time><span class="domain">doubleclick.net</span><span class="no">blocked</span></li>
+          <li><time>17:42:08</time><span class="domain">app-measurement.com</span><span class="no">blocked</span></li>
+          <li><time>17:42:08</time><span class="domain">weather.gov</span><span class="ok">answered</span></li>
+          <li><time>17:42:09</time><span class="domain">ads.mobile-sdk.net</span><span class="no">blocked</span></li>
+          <li><time>17:42:11</time><span class="domain">icloud.com</span><span class="ok">answered</span></li>
+          <li><time>17:42:12</time><span class="domain">telemetry.app-cdn.io</span><span class="no">blocked</span></li>
+          <li><time>17:42:13</time><span class="domain">wikipedia.org</span><span class="ok">answered</span></li>
+        </ol>
+        <p class="console-foot">Typical day: thousands of lookups from one phone, about a fifth of them ads and trackers.</p>
+      </figure>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" class="section">
+      <h2>Projects</h2>
+
+      <article class="feature">
+        <div class="feature-head">
+          <h3>Network-wide ad blocker on a Raspberry Pi 2</h3>
+          <p class="stack">Raspberry Pi OS Lite, Pi-hole, Tailscale, Linux</p>
+        </div>
+        <p class="feature-summary">I turned an old Raspberry Pi 2 into a DNS server that blocks ads and trackers for my phone wherever I am, on a building network I don't control. Getting there meant solving four problems, in this order:</p>
+
+        <ol class="steps">
+          <li>
+            <h4>The Pi booted to a black screen</h4>
+            <p>The board was running but showed no picture. I confirmed Linux was alive by toggling Caps Lock on a USB keyboard, traced the problem to the graphics driver handoff, and fixed it by disabling the KMS overlay in <code>config.txt</code>.</p>
+          </li>
+          <li>
+            <h4>The apartment network isolates devices</h4>
+            <p>My laptop and phone couldn't reach the Pi on the building Wi-Fi. Instead of a personal router the lease might not allow, I put the Pi and my devices on a Tailscale mesh network and routed DNS through the Pi's private address.</p>
+          </li>
+          <li>
+            <h4>Pi-hole ignored requests from the VPN</h4>
+            <p>Queries arrived on the Tailscale interface and were dropped. I changed Pi-hole's listening mode so it answers on every interface, which is safe because only my own devices can reach it.</p>
+          </li>
+          <li>
+            <h4>The building blocks outside DNS servers</h4>
+            <p>Lookups reached the Pi but never got answers. Testing with <code>dig</code> showed queries to public resolvers timed out while the building's own resolver worked, so I pointed Pi-hole's upstream at the building's DNS.</p>
+          </li>
+        </ol>
+
+        <p class="result">Result: ad and tracker blocking on my phone at home, on campus and on cellular data, with a dashboard showing every domain my devices contact.</p>
+      </article>
+
+      <div class="minor">
+        <article class="project">
+          <h3>This website</h3>
+          <p>Hand-written HTML and CSS served by nginx from the same Pi 2, running on its own port alongside Pi-hole.</p>
+          <p class="stack">nginx, HTML, CSS</p>
+        </article>
+
+        <article class="project in-progress">
+          <h3>SSH honeypot <span class="status">In progress</span></h3>
+          <p>A fake SSH service that logs login attempts, so I can study what automated attacks try first.</p>
+          <p class="stack">Python, SQLite</p>
+        </article>
+
+        <article class="project in-progress">
+          <h3>Room sensor and badge station <span class="status">Planned</span></h3>
+          <p>An Arduino reads temperature and RFID badge scans and reports to the Pi, which logs access attempts and graphs the room.</p>
+          <p class="stack">Arduino, serial, Python, Flask</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" class="section">
+      <h2>Skills</h2>
+      <div class="skills">
+        <div>
+          <h3>Networking</h3>
+          <ul>
+            <li>DNS and DHCP</li>
+            <li>VPN and mesh networks (Tailscale)</li>
+            <li>Troubleshooting with ping, dig, curl</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Systems</h3>
+          <ul>
+            <li>Linux command line</li>
+            <li>Raspberry Pi setup and config</li>
+            <li>nginx web server</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Coursework</h3>
+          <ul>
+            <!-- EDIT: adjust to match your classes -->
+            <li>Data communications and network architecture</li>
+            <li>Data mining</li>
+            <li>Software development</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section contact">
+      <h2>Get in touch</h2>
+      <p>I'm open to internships and entry-level roles in IT, networking and security.</p>
+      <ul class="links">
+        <!-- EDIT: replace these three with your real links -->
+        <li><a href="mailto:you@example.com">you@example.com</a></li>
+        <li><a href="https://www.linkedin.com/in/your-profile">LinkedIn</a></li>
+        <li><a href="https://github.com/your-username">GitHub</a></li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer class="foot">
+    <p>Served from a Raspberry Pi 2 on my desk, running nginx.</p>
+  </footer>
+
+  <script>
+    // Reveal the query log one line at a time, once.
+    (function () {
+      var lines = document.querySelectorAll('.log li');
+      var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      lines.forEach(function (li, i) {
+        if (calm) { li.classList.add('shown'); return; }
+        setTimeout(function () { li.classList.add('shown'); }, 300 + i * 260);
+      });
+    })();
+  </script>
+</body>
+</html>
