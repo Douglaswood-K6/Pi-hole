@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Doug | Networking &amp; Security Projects</title>
-  <meta name="description" content="Student portfolio: home network projects built on a Raspberry Pi, including a self-hosted DNS ad blocker and this website.">
+  <title>Douglas Wood | Networking &amp; Security Projects</title>
+  <meta name="description" content="Douglas Wood, Computer Information Systems student at Texas State University. Home network projects on a Raspberry Pi, software and data projects.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;800&family=Martian+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -16,7 +16,7 @@
   <header class="top">
     <a class="brand" href="#">
       <span class="leds" aria-hidden="true"><i class="led led-pwr"></i><i class="led led-act"></i></span>
-      doug
+      douglas wood
     </a>
     <nav aria-label="Main">
       <a href="#projects">Projects</a>
@@ -30,29 +30,52 @@
     <!-- HERO -->
     <section class="hero">
       <div class="hero-text">
-        <!-- EDIT: add your last name after Doug -->
-        <h1>Doug</h1>
+        <h1>Douglas Wood</h1>
         <p class="lede">I'm a student who learns networking by building it. Right now that means a Raspberry Pi in my apartment filtering every DNS lookup my devices make.</p>
-        <p class="hero-meta">Studying networking, data and software <!-- EDIT: replace with your major and school --> at <span class="placeholder">[Your University]</span>. Looking for IT and cybersecurity internships.</p>
+        <p class="hero-meta">Computer Information Systems at Texas State University. Looking for IT and cybersecurity internships.</p>
         <a class="button" href="#projects">See what I've built</a>
       </div>
 
-      <figure class="console" aria-label="Sample of live DNS queries from my Pi-hole">
+      <figure class="console" id="live" aria-label="Live statistics from my Pi-hole DNS server">
         <figcaption>
-          <span class="dot"></span> pi-hole query log
-          <span class="console-host">raspberrypi</span>
+          <span class="dot" id="live-dot"></span> live from my pi-hole
+          <span class="console-host" id="live-updated">connecting…</span>
         </figcaption>
-        <ol class="log">
-          <li><time>17:42:07</time><span class="domain">github.com</span><span class="ok">answered</span></li>
-          <li><time>17:42:07</time><span class="domain">doubleclick.net</span><span class="no">blocked</span></li>
-          <li><time>17:42:08</time><span class="domain">app-measurement.com</span><span class="no">blocked</span></li>
-          <li><time>17:42:08</time><span class="domain">weather.gov</span><span class="ok">answered</span></li>
-          <li><time>17:42:09</time><span class="domain">ads.mobile-sdk.net</span><span class="no">blocked</span></li>
-          <li><time>17:42:11</time><span class="domain">icloud.com</span><span class="ok">answered</span></li>
-          <li><time>17:42:12</time><span class="domain">telemetry.app-cdn.io</span><span class="no">blocked</span></li>
-          <li><time>17:42:13</time><span class="domain">wikipedia.org</span><span class="ok">answered</span></li>
-        </ol>
-        <p class="console-foot">Typical day: thousands of lookups from one phone, about a fifth of them ads and trackers.</p>
+
+        <div class="tiles">
+          <div class="tile">
+            <span class="tile-num" id="s-total">–</span>
+            <span class="tile-label">lookups, last 24h</span>
+          </div>
+          <div class="tile">
+            <span class="tile-num" id="s-blocked">–</span>
+            <span class="tile-label">blocked</span>
+          </div>
+          <div class="tile">
+            <span class="tile-num" id="s-percent">–</span>
+            <span class="tile-label">ads &amp; trackers</span>
+          </div>
+        </div>
+
+        <div class="chart" id="chart-wrap" hidden>
+          <div class="chart-head">
+            <span>Lookups per hour</span>
+            <span class="legend">
+              <span><i class="key key-ok"></i>answered</span>
+              <span><i class="key key-no"></i>blocked</span>
+            </span>
+          </div>
+          <div class="bars" id="bars" role="img"></div>
+          <div class="bars-axis"><span>24h ago</span><span>12h</span><span>now</span></div>
+          <div class="tip" id="tip" hidden></div>
+        </div>
+
+        <div class="blocked" id="top-wrap" hidden>
+          <p class="top-title">Most blocked domains</p>
+          <ol class="top-list" id="top-list"></ol>
+        </div>
+
+        <p class="console-foot" id="live-note">Numbers update every few minutes, straight from the Pi. Only totals are shown here, never the sites I visit.</p>
       </figure>
     </section>
 
@@ -89,23 +112,52 @@
         <p class="result">Result: ad and tracker blocking on my phone at home, on campus and on cellular data, with a dashboard showing every domain my devices contact.</p>
       </article>
 
-      <div class="minor">
-        <article class="project">
-          <h3>This website</h3>
-          <p>Hand-written HTML and CSS served by nginx from the same Pi 2, running on its own port alongside Pi-hole.</p>
-          <p class="stack">nginx, HTML, CSS</p>
+      <div class="pair">
+        <article class="detail">
+          <h3>Miniature ERP system for a semiconductor manufacturer</h3>
+          <p class="stack">Team project built in Python, Tkinter and SQLite</p>
+          <ul>
+            <li>Desktop app covering inventory, production, point of sale, payroll and reporting.</li>
+            <li>Separated UI, service and repository layers, so no screen touches the database directly and all validation and business rules run in the service layer.</li>
+            <li>Finalized prompts across a multi-model workflow, running team drafts through Claude, ChatGPT and Gemini and synthesizing the outputs over 20+ iterations.</li>
+            <li>Served as system tester: wrote test scenarios, ran the app against them and used Claude Code to triage defects, including a SQLite transaction isolation bug, a dashboard memory leak and a screen that bypassed the service layer.</li>
+          </ul>
         </article>
 
-        <article class="project in-progress">
-          <h3>SSH honeypot <span class="status">In progress</span></h3>
+        <article class="detail">
+          <h3>NBA player statistics analysis</h3>
+          <p class="stack">Data mining final project in R and RStudio</p>
+          <ul>
+            <li>Analyzed a full season of NBA player stats to test whether offensive or defensive statistics better predict player efficiency.</li>
+            <li>Applied multiple linear regression, principal component regression, classification trees, naive Bayes and k-means clustering.</li>
+            <li>Led the analysis, debugged teammates' R code and consolidated the group's work into a single R Markdown report.</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="minor">
+        <article class="project">
+          <h3>Synthetic data generator</h3>
+          <p>A Python program that generates synthetic CSV records from a delimited input file. It validates several delimiter formats, logs malformed lines with line numbers, and tracks used name combinations so every record is unique. Written without AI assistance.</p>
+          <p class="stack">Python, file I/O</p>
+        </article>
+
+        <article class="project">
+          <h3>This website</h3>
+          <p>The HTML, CSS, JavaScript and stats script were written by Claude, an AI assistant. I set up and run everything underneath: nginx on the Pi, the deploy from GitHub, the Pi-hole API access and the cron job that refreshes the live numbers every five minutes.</p>
+          <p class="stack">nginx, Git, cron, Pi-hole API</p>
+        </article>
+
+        <article class="project">
+          <h3>SSH honeypot <span class="status">Planned</span></h3>
           <p>A fake SSH service that logs login attempts, so I can study what automated attacks try first.</p>
           <p class="stack">Python, SQLite</p>
         </article>
 
-        <article class="project in-progress">
+        <article class="project">
           <h3>Room sensor and badge station <span class="status">Planned</span></h3>
           <p>An Arduino reads temperature and RFID badge scans and reports to the Pi, which logs access attempts and graphs the room.</p>
-          <p class="stack">Arduino, serial, Python, Flask</p>
+          <p class="stack">Arduino, serial, Python</p>
         </article>
       </div>
     </section>
@@ -114,6 +166,30 @@
     <section id="skills" class="section">
       <h2>Skills</h2>
       <div class="skills">
+        <div>
+          <h3>Languages</h3>
+          <ul>
+            <li>Python</li>
+            <li>R</li>
+            <li>SQL</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Databases</h3>
+          <ul>
+            <li>SQLite</li>
+            <li>Microsoft SQL Server (SSMS)</li>
+            <li>Query writing and relational table design</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Data mining</h3>
+          <ul>
+            <li>RStudio and R Markdown</li>
+            <li>Regression, PCR, classification trees</li>
+            <li>Naive Bayes, k-means clustering</li>
+          </ul>
+        </div>
         <div>
           <h3>Networking</h3>
           <ul>
@@ -126,17 +202,35 @@
           <h3>Systems</h3>
           <ul>
             <li>Linux command line</li>
-            <li>Raspberry Pi setup and config</li>
-            <li>nginx web server</li>
+            <li>Raspberry Pi, nginx, cron</li>
+            <li>Git-based deploys</li>
           </ul>
         </div>
         <div>
-          <h3>Coursework</h3>
+          <h3>Testing and AI tools</h3>
           <ul>
-            <!-- EDIT: adjust to match your classes -->
-            <li>Data communications and network architecture</li>
-            <li>Data mining</li>
-            <li>Software development</li>
+            <li>Test scenario design, defect triage</li>
+            <li>Claude Code</li>
+            <li>Prompt engineering, multi-model synthesis</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- EDUCATION -->
+    <section id="education" class="section">
+      <h2>Education</h2>
+      <div class="edu">
+        <div>
+          <h3>Texas State University</h3>
+          <p>Computer Information Systems, McCoy College of Business</p>
+          <p class="stack">Coursework: data communications and network architecture, data mining, software development, databases</p>
+        </div>
+        <div>
+          <h3>Certificates</h3>
+          <ul>
+            <li>Develop and Lead, McCoy College of Business (Spring 2025)</li>
+            <li>Workforce Readiness Essential Skills Training</li>
           </ul>
         </div>
       </div>
@@ -147,9 +241,9 @@
       <h2>Get in touch</h2>
       <p>I'm open to internships and entry-level roles in IT, networking and security.</p>
       <ul class="links">
-        <!-- EDIT: replace these three with your real links -->
-        <li><a href="mailto:you@example.com">you@example.com</a></li>
-        <li><a href="https://www.linkedin.com/in/your-profile">LinkedIn</a></li>
+        <li><a href="mailto:douglaswood.austin32@gmail.com">douglaswood.austin32@gmail.com</a></li>
+        <li><a href="https://www.linkedin.com/in/dougwoodmccoy">LinkedIn</a></li>
+        <!-- EDIT: put your GitHub username in this link, or delete this line -->
         <li><a href="https://github.com/your-username">GitHub</a></li>
       </ul>
     </section>
@@ -157,18 +251,110 @@
   </main>
 
   <footer class="foot">
-    <p>Served from a Raspberry Pi 2 on my desk, running nginx.</p>
+    <p>Served from a Raspberry Pi 2 on my desk, running nginx. Code written with Claude.</p>
   </footer>
 
   <script>
-    // Reveal the query log one line at a time, once.
+    // Live Pi-hole stats. A script on the Pi writes stats.json every 5 minutes;
+    // this page reads it and redraws.
     (function () {
-      var lines = document.querySelectorAll('.log li');
-      var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      lines.forEach(function (li, i) {
-        if (calm) { li.classList.add('shown'); return; }
-        setTimeout(function () { li.classList.add('shown'); }, 300 + i * 260);
-      });
+      var $ = function (id) { return document.getElementById(id); };
+      var fmt = function (n) { return Number(n).toLocaleString('en-US'); };
+
+      function ago(seconds) {
+        var m = Math.round((Date.now() / 1000 - seconds) / 60);
+        if (m < 1) return 'updated just now';
+        if (m < 60) return 'updated ' + m + ' min ago';
+        return 'updated ' + Math.round(m / 60) + ' h ago';
+      }
+
+      function hourLabel(t) {
+        return new Date(t * 1000).toLocaleTimeString('en-US', { hour: 'numeric' });
+      }
+
+      function drawBars(hours) {
+        var bars = $('bars'), tip = $('tip'), wrap = $('chart-wrap');
+        if (!hours || hours.length < 2) { wrap.hidden = true; return; }
+        var max = Math.max.apply(null, hours.map(function (h) { return h.total; })) || 1;
+        bars.innerHTML = '';
+        bars.setAttribute('aria-label', 'Bar chart of DNS lookups per hour over the last 24 hours, split into answered and blocked');
+
+        hours.forEach(function (h) {
+          var answered = Math.max(h.total - h.blocked, 0);
+          var col = document.createElement('div');
+          col.className = 'col';
+          col.tabIndex = 0;
+          var text = hourLabel(h.t) + ': ' + fmt(h.total) + ' lookups, ' + fmt(h.blocked) + ' blocked';
+          col.setAttribute('aria-label', text);
+
+          var ok = document.createElement('i');
+          ok.className = 'seg seg-ok';
+          ok.style.height = (answered / max * 100) + '%';
+          var no = document.createElement('i');
+          no.className = 'seg seg-no';
+          no.style.height = (h.blocked / max * 100) + '%';
+          col.appendChild(ok);
+          col.appendChild(no);
+
+          function show() {
+            tip.innerHTML = '<strong>' + hourLabel(h.t) + '</strong><br>' +
+              fmt(answered) + ' answered<br>' + fmt(h.blocked) + ' blocked';
+            tip.hidden = false;
+            var c = col.getBoundingClientRect(), w = wrap.getBoundingClientRect();
+            var x = c.left - w.left + c.width / 2;
+            x = Math.min(Math.max(x, 60), w.width - 60);
+            tip.style.left = x + 'px';
+          }
+          function hide() { tip.hidden = true; }
+          col.addEventListener('mouseenter', show);
+          col.addEventListener('focus', show);
+          col.addEventListener('mouseleave', hide);
+          col.addEventListener('blur', hide);
+          bars.appendChild(col);
+        });
+        wrap.hidden = false;
+      }
+
+      function drawTop(list) {
+        var ol = $('top-list');
+        if (!list || !list.length) { $('top-wrap').hidden = true; return; }
+        ol.innerHTML = '';
+        list.forEach(function (d) {
+          var li = document.createElement('li');
+          var name = document.createElement('span');
+          name.className = 'domain';
+          name.textContent = d.domain;           // textContent: never inject HTML
+          var count = document.createElement('span');
+          count.className = 'count';
+          count.textContent = fmt(d.count);
+          li.appendChild(name);
+          li.appendChild(count);
+          ol.appendChild(li);
+        });
+        $('top-wrap').hidden = false;
+      }
+
+      function load() {
+        fetch('stats.json', { cache: 'no-store' })
+          .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+          .then(function (s) {
+            $('s-total').textContent = fmt(s.total);
+            $('s-blocked').textContent = fmt(s.blocked);
+            $('s-percent').textContent = s.percent_blocked + '%';
+            $('live-updated').textContent = ago(s.updated);
+            $('live-dot').classList.add('on');
+            drawBars(s.hourly);
+            drawTop(s.top_blocked);
+          })
+          .catch(function () {
+            $('live-updated').textContent = 'offline';
+            $('live-dot').classList.remove('on');
+            $('live-note').textContent = 'Live stats aren’t available right now. They load when this page is served from my Raspberry Pi.';
+          });
+      }
+
+      load();
+      setInterval(load, 5 * 60 * 1000);
     })();
   </script>
 </body>
